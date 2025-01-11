@@ -244,14 +244,3 @@ class Ui_MainWindow(object):
 
     def update_slider_label(self):
         self.slider_label.setText(f"{self.horizontalSlider.value()}%")
-
-
-if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.showFullScreen()
-    sys.exit(app.exec_())
