@@ -1,23 +1,27 @@
-from pyqtgraph import PlotWidget, mkPen
+from PyQt5.QtGui import QPixmap
+from pyqtgraph import PlotWidget, mkPen, TextItem
 from scipy import signal
 from scipy.signal import freqz, butter, cheby1, cheby2, ellip, sosfreqz,lfilter ,tf2sos
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QGraphicsRectItem, QGraphicsEllipseItem, QLabel, QVBoxLayout
 from PyQt5.QtCore import Qt
 import numpy as np
 import csv
 import os
-# from tkinter import Tk
-# from tkinter.filedialog import asksaveasfilename, askopenfilename
-
+import pyqtgraph as pg
+from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename, askopenfilename
+import schemdraw
+import schemdraw.elements as elm
 
 class ZPlaneController:
-    def __init__(self, plot_widget ,mag_plot_widget, phase_plot_widget, add_conjugate_checkbox, zeros_radio_button, poles_radio_button):
+    def __init__(self, plot_widget ,mag_plot_widget, phase_plot_widget ,realization_plot, add_conjugate_checkbox, zeros_radio_button, poles_radio_button):
         self.plot_widget = plot_widget
         self.add_conjugate_checkbox = add_conjugate_checkbox
         self.zeros_radio_button = zeros_radio_button
         self.poles_radio_button = poles_radio_button
         self.mag_plot_widget = mag_plot_widget
         self.phase_plot_widget = phase_plot_widget
+        self.realization_plot = realization_plot
 
         # Data storage
         self.zeros = []
@@ -31,8 +35,8 @@ class ZPlaneController:
         self.scatter_poles = self.plot_widget.plot(pen=None, symbol='x', symbolBrush='red', symbolSize=12)
 
         # Draw axes on the unit circle
-        self.ax_h = self.plot_widget.plot([-1, 1], [0, 0], pen=mkPen('blue', width=2))  # Horizontal axis (x-axis)
-        self.ax_v = self.plot_widget.plot([0, 0], [-1, 1], pen=mkPen('blue', width=2))  # Vertical axis (y-axis)
+        self.ax_h = self.plot_widget.plot([-1, 1], [0, 0], pen=mkPen('blue', width=2))
+        self.ax_v = self.plot_widget.plot([0, 0], [-1, 1], pen=mkPen('blue', width=2))
 
         self.update_unit_circle()
         # Frequency response plots
@@ -44,6 +48,9 @@ class ZPlaneController:
 
         # Filter library
         self.filter_library = {
+            # None Option
+            "None": lambda: (np.array([1.0]), np.array([1.0])),  # No filtering applied
+
             # Butterworth Filters
             "Butterworth LPF": lambda: butter(4, 0.4, btype="low", output="ba"),
             "Butterworth HPF": lambda: butter(4, 0.4, btype="high", output="ba"),
@@ -64,20 +71,23 @@ class ZPlaneController:
             "Elliptic HPF": lambda: ellip(4, 1, 20, 0.4, btype="high", output="ba"),
         }
 
-        # Connect filter selection
-        self.filter_selection = None  # Store selected filter
+        # Initial filter selection set to None
+        self.filter_selection = "None"  # Default to no filtering
 
-    # def apply_selected_filter(self):
-    #     """Apply the selected filter to the input signal."""
-    #     if self.filter_selection:
-    #         b, a = self.filter_library[self.filter_selection]()
-    #         # Apply the filter to the input signal (assumed to be available)
-    #         filtered_signal = lfilter(b, a, self.input_signal)
-    #         return filtered_signal
+    def update_z_plane_from_filter(self):
+        """Update Z-plane with zeros and poles of the selected filter."""
+        if self.filter_selection == "None":
+            self.zeros.clear()
+            self.poles.clear()
+        else:
+            # Get numerator (b) and denominator (a) coefficients
+            b, a = self.filter_library[self.filter_selection]()
+            # Compute zeros and poles
+            self.zeros = list(np.roots(b))  # Zeros of the filter
+            self.poles = list(np.roots(a))  # Poles of the filter
 
-    def on_filter_selection_changed(self, index):
-        """Handle filter selection change."""
-        self.filter_selection = list(self.filter_library.keys())[index]
+        self.save_state()
+        self.update_plot()
 
     def update_unit_circle(self):
         """Draw the unit circle."""
@@ -97,8 +107,15 @@ class ZPlaneController:
         w, h = freqz(b, a, worN=500)  # Frequency response
 
         # Update magnitude and phase response
-        self.mag_response.setData(w, np.abs(h))
-        self.phase_response.setData(w, np.angle(h))
+        self.mag_response.setData(w / (np.pi / 2), np.abs(h))  # Scale x-axis
+        self.phase_response.setData(w / (np.pi / 2), np.angle(h))
+
+    def configure_x_axis(self, plot_widget):
+        """Configure the x-axis to display ticks in multiples of π/2."""
+        axis = plot_widget.getAxis('bottom')  # Get the bottom axis
+        tick_values = [(i, f"{i}π/2") for i in range(0, 11)]  # Up to 5π
+        ticks = [tick_values]
+        axis.setTicks(ticks)
 
     def update_plot(self):
         """Update the Z-plane plot with zeros and poles."""
@@ -204,8 +221,8 @@ class ZPlaneController:
     def save_to_file(self):
         """Save zeros and poles to a CSV file with a user-specified name and directory."""
         # Initialize Tkinter and hide the root window
-        # root = Tk()
-        # root.withdraw()
+        root = Tk()
+        root.withdraw()
 
         # Prompt user to choose a file location and name
         filepath = asksaveasfilename(
@@ -232,8 +249,8 @@ class ZPlaneController:
     def load_from_file(self):
         """Load zeros and poles from a user-selected CSV file."""
         # Initialize Tkinter and hide the root window
-        # root = Tk()
-        # root.withdraw()
+        root = Tk()
+        root.withdraw()
 
         # Prompt user to choose a file to load
         filepath = askopenfilename(
@@ -273,4 +290,117 @@ class ZPlaneController:
         self.save_state()
         self.update_plot()
 
+    # def draw_direct_form_i_diagram(self):
+    #     """Draw Direct Form I realization using SchemDraw."""
+    #     # Get filter coefficients
+    #     b_coeffs, a_coeffs = self.get_filter_coefficients()
+    #
+    #     # Normalize coefficients if a[0] != 1
+    #     if a_coeffs[0] != 1:
+    #         b_coeffs = b_coeffs / a_coeffs[0]
+    #         a_coeffs = a_coeffs / a_coeffs[0]
+    #
+    #     # Start drawing the circuit
+    #     with schemdraw.Drawing() as d:
+    #         d.config(unit=1.5)  # Set unit scale for spacing
+    #
+    #         # Input
+    #         d += elm.SourceV().label("x[n]", loc='left')
+    #
+    #         # Feedforward Path (b-coefficients)
+    #         prev_block = None
+    #         for i, b in enumerate(b_coeffs):
+    #             if i > 0:
+    #                 # Add delay blocks (z⁻¹)
+    #                 d += elm.Dot() if prev_block is None else prev_block
+    #                 d += elm.Line().down()
+    #                 d += elm.Rect(w=1, h=0.5).label("Z⁻¹", loc='center')
+    #                 prev_block = elm.Line().up()
+    #             # Add feedforward coefficient block
+    #             d += elm.Rect(w=1, h=0.5).label(f"b{i}={b:.2f}", loc='right')
+    #
+    #         # Summation Node
+    #         d += elm.Dot(open=True).label("Σ", loc='center')
+    #
+    #         # Feedback Path (a-coefficients)
+    #         for i, a in enumerate(a_coeffs[1:], start=1):  # Skip a[0] (assumed 1)
+    #             d += elm.Line().down()
+    #             d += elm.Rect(w=1, h=0.5).label("Z⁻¹", loc='center')
+    #             d += elm.Rect(w=1, h=0.5).label(f"a{i}={a:.2f}", loc='right')
+    #
+    #         # Output
+    #         d += elm.Line().right()
+    #         d += elm.Dot(open=True).label("y[n]", loc='right')
+    #
+    #         # Save the diagram
+    #         file_path = "direct_form_i_diagram.png"
+    #         d.save(file_path)
+    #
+    #     return file_path
+
+    def draw_direct_form_i_diagram(self):
+        """Draw Direct Form I realization diagram horizontally using SchemDraw."""
+        # Get filter coefficients
+        b_coeffs, a_coeffs = self.get_filter_coefficients()
+
+        # Normalize coefficients if a[0] != 1
+        if a_coeffs[0] != 1:
+            b_coeffs = b_coeffs / a_coeffs[0]
+            a_coeffs = a_coeffs / a_coeffs[0]
+
+        # Start drawing the circuit
+        with schemdraw.Drawing() as d:
+            d.config(unit=2)  # Set unit scale for spacing
+
+            # Input signal
+            d += elm.SourceV().label("x[n]", loc='left')
+
+            # Summation node (Σ)
+            summation = d.add(elm.Dot(open=True).label("Σ", loc="top"))
+
+            # Feedforward path (b-coefficients)
+            feedforward_anchor = summation  # Start from the summation node
+            for i, b in enumerate(b_coeffs):
+                if i > 0:
+                    # Add delay block (Z⁻¹)
+                    delay = d.add(elm.Rect(w=1.5, h=1).label("Z⁻¹", loc='center'))
+                    d += elm.Line().right()  # Move to the next position
+                # Add feedforward coefficient block
+                d += elm.Rect(w=2, h=1).label(f"b{i}={b:.2f}", loc='center')
+
+            # Feedback path (a-coefficients)
+            for i, a in enumerate(a_coeffs[1:], start=1):  # Skip a[0] (assumed 1)
+                d.push()  # Save current position
+                d += elm.Line().down().length(2)  # Move down
+                d += elm.Rect(w=1.5, h=1).label("Z⁻¹", loc='center')  # Add delay block
+                d += elm.Line().left().length(4)  # Move left toward summation
+                d += elm.Line().up().to(feedforward_anchor.center)  # Connect to the summation node
+                d.pop()  # Restore position
+
+            # Output signal
+            d += elm.Line().right()
+            d += elm.Rect(w=2, h=1).label("y[n]", loc='center')
+
+            # Save the diagram
+            file_path = "direct_form_i_horizontal_diagram.png"
+            d.save(file_path)
+
+        return file_path
+
+    def display_circuit_in_groupbox(self):
+        # Generate the diagram
+        diagram_path = self.draw_direct_form_i_diagram()
+
+        # Load the diagram into a QLabel
+        pixmap = QPixmap(diagram_path)
+
+        # Create a QLabel to hold the image
+        diagram_label = QLabel()
+        diagram_label.setPixmap(pixmap)
+        diagram_label.setScaledContents(True)  # Scale the image to fit
+
+        # Add the QLabel to the filter_realization_groupBox
+        layout = QVBoxLayout(self.realization_plot)  # Assuming QVBoxLayout
+        layout.addWidget(diagram_label)
+        self.realization_plot.setLayout(layout)
 

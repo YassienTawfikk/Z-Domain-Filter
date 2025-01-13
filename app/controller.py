@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QVBoxLayout
 
 from app.utils.clean_cache import remove_directories
 from app.ui.design02 import Ui_MainWindow
-from app.services.upload_signal import CSVFileUploader
 from app.services.zplane_controller import ZPlaneController
 from app.services.mouse_signal_input import MouseSignalInput
 
@@ -25,6 +24,7 @@ class MainWindowController(QtWidgets.QMainWindow):
             self.ui.z_plane_plot_widget,
             self.ui.magnitude_plot_widget,
             self.ui.phase_plot_widget,
+            self.ui.filter_realization_groupBox,
             self.ui.add_conjugate_checkBox,
             self.ui.zeros_radioButton,
             self.ui.poles_radioButton,
@@ -47,13 +47,27 @@ class MainWindowController(QtWidgets.QMainWindow):
         self.ui.load_filter_button.clicked.connect(lambda: self.zplane_controller.load_from_file())
 
         # Connect Z-plane actions
-        # self.ui.swap_button.clicked.connect(self.zplane_controller.swap_zeros_poles)
+        self.ui.swap_button.clicked.connect(self.zplane_controller.swap_zeros_poles)
         self.ui.clear_zeros_button.clicked.connect(self.zplane_controller.clear_zeros)
         self.ui.clear_poles_button.clicked.connect(self.zplane_controller.clear_poles)
         self.ui.clear_all_button.clicked.connect(self.zplane_controller.clear_all)
         self.ui.undo_button.clicked.connect(self.zplane_controller.undo)
         self.ui.redo_button.clicked.connect(self.zplane_controller.redo)
-        self.ui.filters_library_combobox.currentIndexChanged.connect(self.zplane_controller.on_filter_selection_changed)
+        # Populate the combobox with filters
+        self.ui.filters_library_combobox.addItems(self.zplane_controller.filter_library.keys())
+        self.ui.filters_library_combobox.currentIndexChanged.connect(self.apply_selected_filter)
+        self.ui.filter_realizaion_structure.clicked.connect(self.zplane_controller.display_circuit_in_groupbox)
+        self.zplane_controller.configure_x_axis(self.ui.magnitude_plot_widget)
+        self.zplane_controller.configure_x_axis(self.ui.phase_plot_widget)
+
+    def apply_selected_filter(self, index):
+        """Handle filter selection from the combobox."""
+        if index < 0:
+            return  # Ignore invalid selection
+        filter_name = self.ui.filters_library_combobox.itemText(index)
+        self.zplane_controller.filter_selection = filter_name
+        self.zplane_controller.update_z_plane_from_filter()  # Update Z-plane
+        self.mouse_signal_input.set_filter(filter_name)
 
     def quit_app(self):
         self.app.quit()
