@@ -295,8 +295,6 @@ class Ui_MainWindow(object):
         self.all_pass_filters.setStyleSheet(BUTTON_STYLESHEET + "border-radius:10px;")
         self.all_pass_filters.setObjectName("all_pass_filters")
 
-
-
     def setupFrequencyResponse(self):
         """
         Creates the horizontal layout for magnitude response & phase response group boxes.
@@ -448,7 +446,6 @@ class Ui_MainWindow(object):
         self.filter_realization_groupBox.setTitle("")
         self.filter_realization_groupBox.setObjectName("filter_realization_groupBox")
         # self.filter_ralization_plot_widget = self.addGraphView(self.filter_realization_groupBox)
-
 
         # Filter Realization Buttons
         self.filter_realizaion_structure = QtWidgets.QPushButton(self.filter_realization_groupBox)
