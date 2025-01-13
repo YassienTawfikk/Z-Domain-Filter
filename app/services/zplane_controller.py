@@ -1,20 +1,21 @@
-from PyQt5.QtGui import QPixmap
-from pyqtgraph import PlotWidget, mkPen, TextItem
-from scipy import signal
-from scipy.signal import freqz, butter, cheby1, cheby2, ellip, sosfreqz,lfilter ,tf2sos
-from PyQt5.QtWidgets import QFileDialog, QGraphicsRectItem, QGraphicsEllipseItem, QLabel, QVBoxLayout
-from PyQt5.QtCore import Qt
-import numpy as np
 import csv
 import os
-import pyqtgraph as pg
 from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename, askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+
+import numpy as np
+from pyqtgraph import mkPen
+from scipy.signal import butter, cheby1, cheby2, ellip, freqz
 import schemdraw
 import schemdraw.elements as elm
 
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel, QVBoxLayout
+
+
 class ZPlaneController:
-    def __init__(self, plot_widget ,mag_plot_widget, phase_plot_widget ,realization_plot, add_conjugate_checkbox, zeros_radio_button, poles_radio_button):
+    def __init__(self, plot_widget, mag_plot_widget, phase_plot_widget, realization_plot, add_conjugate_checkbox, zeros_radio_button, poles_radio_button):
         self.plot_widget = plot_widget
         self.add_conjugate_checkbox = add_conjugate_checkbox
         self.zeros_radio_button = zeros_radio_button
@@ -56,7 +57,7 @@ class ZPlaneController:
             "Butterworth HPF": lambda: butter(4, 0.4, btype="high", output="ba"),
             "Butterworth BPF": lambda: butter(4, [0.3, 0.6], btype="band", output="ba"),
 
-            # Chebyshev I Filters
+            # Chebyshev I Filter
             "Chebyshev I LPF": lambda: cheby1(4, 1, 0.4, btype="low", output="ba"),
             "Chebyshev I HPF": lambda: cheby1(4, 1, 0.4, btype="high", output="ba"),
             "Chebyshev I BPF": lambda: cheby1(4, 1, [0.3, 0.6], btype="band", output="ba"),
@@ -382,7 +383,7 @@ class ZPlaneController:
             d += elm.Rect(w=2, h=1).label("y[n]", loc='center')
 
             # Save the diagram
-            file_path = "direct_form_i_horizontal_diagram.png"
+            file_path = "static/images/direct_form_i_horizontal_diagram.png"
             d.save(file_path)
 
         return file_path
@@ -403,4 +404,3 @@ class ZPlaneController:
         layout = QVBoxLayout(self.realization_plot)  # Assuming QVBoxLayout
         layout.addWidget(diagram_label)
         self.realization_plot.setLayout(layout)
-

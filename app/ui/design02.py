@@ -200,7 +200,7 @@ class Ui_MainWindow(object):
             border-radius: 10px;
         """)
         self.padding_area.setObjectName("padding_area")
-        self.padding_area.setMinimumSize(200, 80)
+        self.padding_area.setMinimumSize(200, 200)
         self.mouse_controller_layout.addWidget(self.padding_area)
 
         self.sidebar_layout.addLayout(self.mouse_controller_layout)

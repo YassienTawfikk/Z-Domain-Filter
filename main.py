@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 def main():
     app = QtWidgets.QApplication(sys.argv)
     main_window = MainWindowController(app)
-    main_window.show()
+    main_window.showFullScreen()
     sys.exit(app.exec_())
 
 

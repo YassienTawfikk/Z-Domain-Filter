@@ -1,8 +1,10 @@
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QWidget
 import numpy as np
 from pyqtgraph import mkPen
 from scipy.signal import lfilter
+
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget
+
 
 class MouseSignalInput(QWidget):
     signal_generated = pyqtSignal(np.ndarray)  # Emitted when a new signal is generated
