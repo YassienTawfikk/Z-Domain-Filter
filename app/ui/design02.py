@@ -200,7 +200,7 @@ class Ui_MainWindow(object):
             border-radius: 10px;
         """)
         self.padding_area.setObjectName("padding_area")
-        self.padding_area.setMinimumSize(200, 200)
+        self.padding_area.setMinimumSize(200, 80)
         self.mouse_controller_layout.addWidget(self.padding_area)
 
         self.sidebar_layout.addLayout(self.mouse_controller_layout)
@@ -255,16 +255,27 @@ class Ui_MainWindow(object):
         self.poles_radioButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.poles_radioButton.setObjectName("poles_radioButton")
 
+        self.swap_button = QtWidgets.QPushButton(self.controls_widget)
+        self.swap_button.setGeometry(QtCore.QRect(245, 12, 110, 37))
+        self.swap_button.setMaximumSize(QtCore.QSize(240, 40))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        self.swap_button.setFont(font)
+        self.swap_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.swap_button.setStyleSheet(BUTTON_STYLESHEET + "border-radius:10px;")
+        self.swap_button.setObjectName("swap_button")
+
         # Slider
         self.horizontalSlider = QtWidgets.QSlider(self.controls_widget)
-        self.horizontalSlider.setGeometry(QtCore.QRect(270, 20, 261, 21))
+        self.horizontalSlider.setGeometry(QtCore.QRect(370, 20, 250, 21))
         self.horizontalSlider.setStyleSheet(SLIDER_STYLESHEET)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.horizontalSlider.setValue(50)
 
         self.percentage = QtWidgets.QLabel(self.controls_widget)
-        self.percentage.setGeometry(QtCore.QRect(540, 18, 45, 25))
+        self.percentage.setGeometry(QtCore.QRect(620, 18, 45, 25))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(15)
@@ -274,7 +285,7 @@ class Ui_MainWindow(object):
 
         # All Pass Filters
         self.all_pass_filters = QtWidgets.QPushButton(self.controls_widget)
-        self.all_pass_filters.setGeometry(QtCore.QRect(630, 12, 181, 37))
+        self.all_pass_filters.setGeometry(QtCore.QRect(665, 12, 181, 37))
         self.all_pass_filters.setMaximumSize(QtCore.QSize(240, 40))
         font = QtGui.QFont()
         font.setPointSize(9)
@@ -283,6 +294,8 @@ class Ui_MainWindow(object):
         self.all_pass_filters.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.all_pass_filters.setStyleSheet(BUTTON_STYLESHEET + "border-radius:10px;")
         self.all_pass_filters.setObjectName("all_pass_filters")
+
+
 
     def setupFrequencyResponse(self):
         """
@@ -434,6 +447,8 @@ class Ui_MainWindow(object):
         self.filter_realization_groupBox.setGeometry(QtCore.QRect(360, 0, 360, 350))
         self.filter_realization_groupBox.setTitle("")
         self.filter_realization_groupBox.setObjectName("filter_realization_groupBox")
+        # self.filter_ralization_plot_widget = self.addGraphView(self.filter_realization_groupBox)
+
 
         # Filter Realization Buttons
         self.filter_realizaion_structure = QtWidgets.QPushButton(self.filter_realization_groupBox)
@@ -441,6 +456,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setBold(True)
         self.filter_realizaion_structure.setFont(font)
+        self.filter_realizaion_structure.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
         self.filter_realizaion_structure.setStyleSheet("""
             QPushButton {
                 color: rgb(0, 0, 0);
@@ -455,12 +472,14 @@ class Ui_MainWindow(object):
         """)
         self.filter_realizaion_structure.setObjectName("filter_realizaion_structure")
 
-        self.filter_realizaion_code = QtWidgets.QPushButton(self.filter_realization_groupBox)
-        self.filter_realizaion_code.setGeometry(QtCore.QRect(100, 5, 84, 25))
+        self.filter_realization_code = QtWidgets.QPushButton(self.filter_realization_groupBox)
+        self.filter_realization_code.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+        self.filter_realization_code.setGeometry(QtCore.QRect(100, 5, 84, 25))
         font = QtGui.QFont()
         font.setBold(True)
-        self.filter_realizaion_code.setFont(font)
-        self.filter_realizaion_code.setStyleSheet("""
+        self.filter_realization_code.setFont(font)
+        self.filter_realization_code.setStyleSheet("""
             QPushButton {
                 color: rgb(0, 0, 0);
                 background-color: rgba(255, 255, 255, 0);
@@ -472,7 +491,7 @@ class Ui_MainWindow(object):
                 background-color: rgba(255, 255, 255, 70);
             }
         """)
-        self.filter_realizaion_code.setObjectName("filter_realizaion_code")
+        self.filter_realization_code.setObjectName("filter_realization_code")
 
         # Built-in library combo box
         self.built_In_library_comboBox = QtWidgets.QComboBox(self.z_plane_widget)
@@ -529,6 +548,7 @@ class Ui_MainWindow(object):
         self.poles_radioButton.setText(_translate("MainWindow", "Poles"))
         self.percentage.setText(_translate("MainWindow", "50%"))
         self.all_pass_filters.setText(_translate("MainWindow", "All Pass Filters"))
+        self.swap_button.setText(_translate("MainWindow", "Swap"))
 
         # Frequency Response
         self.magnitude_response_groupbox.setTitle(_translate("MainWindow", "Magnitude Response"))
@@ -542,4 +562,15 @@ class Ui_MainWindow(object):
         self.redo_button.setText(_translate("MainWindow", "Redo"))
         self.z_plane_plot_groupbox.setTitle(_translate("MainWindow", "Z Plane"))
         self.filter_realizaion_structure.setText(_translate("MainWindow", "Structure"))
-        self.filter_realizaion_code.setText(_translate("MainWindow", "Code"))
+        self.filter_realization_code.setText(_translate("MainWindow", "Code"))
+
+
+if __name__ == "__main__":
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.showFullScreen()
+    sys.exit(app.exec_())
