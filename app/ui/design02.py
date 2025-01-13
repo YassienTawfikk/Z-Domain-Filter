@@ -200,7 +200,7 @@ class Ui_MainWindow(object):
             border-radius: 10px;
         """)
         self.padding_area.setObjectName("padding_area")
-        self.padding_area.setMinimumSize(200, 80)
+        self.padding_area.setMinimumSize(200, 200)
         self.mouse_controller_layout.addWidget(self.padding_area)
 
         self.sidebar_layout.addLayout(self.mouse_controller_layout)
@@ -294,8 +294,6 @@ class Ui_MainWindow(object):
         self.all_pass_filters.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.all_pass_filters.setStyleSheet(BUTTON_STYLESHEET + "border-radius:10px;")
         self.all_pass_filters.setObjectName("all_pass_filters")
-
-
 
     def setupFrequencyResponse(self):
         """
@@ -448,7 +446,6 @@ class Ui_MainWindow(object):
         self.filter_realization_groupBox.setTitle("")
         self.filter_realization_groupBox.setObjectName("filter_realization_groupBox")
         # self.filter_ralization_plot_widget = self.addGraphView(self.filter_realization_groupBox)
-
 
         # Filter Realization Buttons
         self.filter_realizaion_structure = QtWidgets.QPushButton(self.filter_realization_groupBox)

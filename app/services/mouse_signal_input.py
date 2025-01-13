@@ -1,24 +1,26 @@
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QWidget
 import numpy as np
 from pyqtgraph import mkPen
 from scipy.signal import lfilter
+
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget
+
 
 class MouseSignalInput(QWidget):
     signal_generated = pyqtSignal(np.ndarray)  # Emitted when a new signal is generated
 
     def __init__(self, original_plot_widget, filtered_plot_widget, zplane_controller):
         super().__init__()
-        self.original_plot_widget = original_plot_widget  # Widget to plot the original signal
-        self.filtered_plot_widget = filtered_plot_widget  # Widget to plot the filtered signal
-        self.zplane_controller = zplane_controller  # ZPlaneController for filter coefficients
+        self.original_plot_widget = original_plot_widget
+        self.filtered_plot_widget = filtered_plot_widget
+        self.zplane_controller = zplane_controller
         self.signal = []
-        self.max_length = 10000  # Max signal length
+        self.max_length = 10000
         self.start_x, self.start_y = None, None
-        self.current_filter = None  # Store the current filter
-        self.window_length = 100  # Set the desired fixed length for the x-axis
+        self.current_filter = None
+        self.window_length = 100
 
-        self.setMouseTracking(True)  # Enable mouse tracking without needing to click
+        self.setMouseTracking(True)
 
     def mouseMoveEvent(self, event):
         """Capture mouse movement and generate signal."""
@@ -100,4 +102,3 @@ class MouseSignalInput(QWidget):
         self.filtered_plot_widget.clear()
         self.start_x = None
         self.start_y = None
-

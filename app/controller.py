@@ -1,10 +1,11 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QVBoxLayout
 
-from app.utils.clean_cache import remove_directories
-from app.ui.design02 import Ui_MainWindow
-from app.services.zplane_controller import ZPlaneController
 from app.services.mouse_signal_input import MouseSignalInput
+from app.services.zplane_controller import ZPlaneController
+from app.ui.design02 import Ui_MainWindow
+from app.utils.clean_cache import remove_directories
+
 
 class MainWindowController(QtWidgets.QMainWindow):
     def __init__(self, app):
@@ -33,7 +34,7 @@ class MainWindowController(QtWidgets.QMainWindow):
     def initialize_mouse_signal_input(self):
         """Set up the mouse signal generator."""
         self.original_plot_widget = self.ui.original_plot_widget  # Plot to display the signal
-        self.mouse_signal_input = MouseSignalInput(self.original_plot_widget ,self.ui.filtered_plot_widget , self.zplane_controller)
+        self.mouse_signal_input = MouseSignalInput(self.original_plot_widget, self.ui.filtered_plot_widget, self.zplane_controller)
 
         # Embed the MouseSignalInput into the padding_area
         self.padding_area_layout = QVBoxLayout(self.ui.padding_area)
