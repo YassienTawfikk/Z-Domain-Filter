@@ -186,14 +186,14 @@ class Ui_MainWindow(object):
 
         # Original signal groupbox
         self.original_signal_groupbox = QtWidgets.QGroupBox(self.sidebar_widget)
-        self.original_signal_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.original_signal_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
         self.original_signal_groupbox.setObjectName("original_signal_groupbox")
         self.sidebar_layout.addWidget(self.original_signal_groupbox)
         self.original_plot_widget = self.addGraphView(self.original_signal_groupbox)
 
         # Filtered signal groupbox
         self.filtered_signal_groupbox = QtWidgets.QGroupBox(self.sidebar_widget)
-        self.filtered_signal_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.filtered_signal_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
         self.filtered_signal_groupbox.setObjectName("filtered_signal_groupbox")
         self.sidebar_layout.addWidget(self.filtered_signal_groupbox)
         self.filtered_plot_widget = self.addGraphView(self.filtered_signal_groupbox)
@@ -298,13 +298,13 @@ class Ui_MainWindow(object):
         self.frequency_response_layout.setSpacing(0)
 
         self.magnitude_response_groupbox = QtWidgets.QGroupBox(self.frequency_response_widget)
-        self.magnitude_response_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.magnitude_response_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
         self.magnitude_response_groupbox.setObjectName("magnitude_response_groupbox")
         self.frequency_response_layout.addWidget(self.magnitude_response_groupbox)
         self.magnitude_plot_widget = self.addGraphView(self.magnitude_response_groupbox)
 
         self.phase_response_groupbox = QtWidgets.QGroupBox(self.frequency_response_widget)
-        self.phase_response_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.phase_response_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
         self.phase_response_groupbox.setObjectName("phase_response_groupbox")
         self.phase_plot_widget = self.addGraphView(self.phase_response_groupbox)
 
@@ -450,6 +450,7 @@ class Ui_MainWindow(object):
         self.z_plane_plot_groupbox = QtWidgets.QGroupBox(self.z_plane_widget)
         self.z_plane_plot_groupbox.setGeometry(QtCore.QRect(-1, 0, 350, 350))
         self.z_plane_plot_groupbox.setObjectName("z_plane_plot_groupbox")
+        self.z_plane_plot_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
         self.z_plane_plot_widget = self.addGraphView(self.z_plane_plot_groupbox)
 
         # Filter Realization group box
