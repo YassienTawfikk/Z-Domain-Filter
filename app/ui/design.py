@@ -450,7 +450,7 @@ class Ui_MainWindow(object):
         self.z_plane_plot_groupbox = QtWidgets.QGroupBox(self.z_plane_widget)
         self.z_plane_plot_groupbox.setGeometry(QtCore.QRect(-1, 0, 350, 350))
         self.z_plane_plot_groupbox.setObjectName("z_plane_plot_groupbox")
-        self.z_plane_plot_groupbox.setStyleSheet("background-color: rgb(240, 240, 240);color:black;")
+        self.z_plane_plot_groupbox.setStyleSheet("color:black;")
         self.z_plane_plot_widget = self.addGraphView(self.z_plane_plot_groupbox)
 
         # Filter Realization group box
