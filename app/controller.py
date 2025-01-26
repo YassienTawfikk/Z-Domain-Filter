@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QVBoxLayout
 
 from app.services.mouse_signal_input import MouseSignalInput
 from app.services.zplane_controller import ZPlaneController
-from app.ui.design02 import Ui_MainWindow
+from app.ui.design import Ui_MainWindow
 from app.utils.clean_cache import remove_directories
 
 
