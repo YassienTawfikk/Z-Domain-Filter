@@ -1,7 +1,15 @@
+
 # Digital Filter Application
 
 ### **Overview**
 The Digital Filter Application is an advanced tool for designing and implementing digital filters. It allows users to interactively place zeros and poles on the z-plane, manipulate them, and observe the resultant changes in the filter's frequency response. This application is ideal for educational purposes, research, and practical applications in signal processing.
+
+---
+
+### **Video Demo**
+Watch a detailed demonstration of the application in action here:
+
+https://github.com/user-attachments/assets/1f5dedce-a009-4fc9-8925-54ea725dcb2b
 
 ---
 
@@ -40,22 +48,17 @@ The Digital Filter Application is an advanced tool for designing and implementin
 Key screenshots demonstrating the application capabilities:
 
 1. **Main Interface with Filter Selection and Z-Plane**  
-   ![Main Interface](file-SdBpREjjELpUtiRhy62VXP)
+   ![Main Interface](https://github.com/user-attachments/assets/80a5685c-ef8d-40f2-aaf2-0752b7b30a76)
 
 2. **Filter Options with Real-time Frequency Response**  
-   ![Filter Options](file-19pcskkqENxLPotQWxn4BS)
+   ![Filter Options](https://github.com/user-attachments/assets/0f57ccb0-f991-4f02-9ba9-a3d6b3882599)
 
 3. **Chebyshev HPF and LPF Implementation**  
-   ![Chebyshev Filters](file-1viKDnBcoST3reLBSjcLUU)
+   ![HPF](https://github.com/user-attachments/assets/09a53c25-018e-4f94-a72a-2fcd53a44650)
+   ![LPF](https://github.com/user-attachments/assets/f02eae57-bf8f-427e-bdec-4371e82e9eaa)
 
 4. **Block Diagram for Chebyshev HPF**  
-   ![Block Diagram](file-P4NYVBjMBSNFWN9iKjnrjV)
-
----
-
-### **Video Demo**
-Watch a detailed demonstration of the application in action here:
-[Digital Filter Application Demo](https://youtube.com/yourvideolink)
+   ![Block Diagram](https://github.com/user-attachments/assets/7233c779-018b-4d3c-bf9e-9db72c1894c4)
 
 ---
 
