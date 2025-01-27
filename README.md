@@ -4,6 +4,8 @@
 ### **Overview**
 The Digital Filter Application is an advanced tool for designing and implementing digital filters. It allows users to interactively place zeros and poles on the z-plane, manipulate them, and observe the resultant changes in the filter's frequency response. This application is ideal for educational purposes, research, and practical applications in signal processing.
 
+![Overview](https://github.com/user-attachments/assets/d2611c72-3b8d-4661-a156-95f2d52faa55)
+
 ---
 
 ### **Video Demo**
